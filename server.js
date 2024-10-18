@@ -5,23 +5,28 @@ const cors = require('cors');
 
 const app = express();
 const server = http.createServer(app);
-const io = socketIo(server, {
-    cors: {
-        origin: [
-            "http://localhost:5173"
-        ],
-        methods: ["GET", "POST"],
-    },
-});
 
+// Define allowed origins for CORS
+const allowedOrigins = [
+    "http://localhost:5173", // Local development URL
+    "https://frontend-chi-two-56.vercel.app" // Your Vercel production URL
+];
+
+// Setup CORS for Express
 app.use(cors({
-    origin: [
-        "http://localhost:5173",
-       
-    ],
+    origin: allowedOrigins,
     methods: ["GET", "POST"],
     credentials: true, // Optional, if you need to include credentials
 }));
+
+// Initialize Socket.IO with CORS settings
+const io = socketIo(server, {
+    cors: {
+        origin: allowedOrigins,
+        methods: ["GET", "POST"],
+        credentials: true, // Optional, if you need to include credentials
+    },
+});
 
 let messages = [];
 
